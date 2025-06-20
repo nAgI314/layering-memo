@@ -1,28 +1,16 @@
-import { StyleSheet } from 'react-native';
+import { MemoPage } from '@/components/Memo';
+import { Stack } from 'expo-router';
+import { Text, View } from 'react-native';
 
-import { Memo } from '@/components/Memo';
+export default function Home() {
 
-export default function HomeScreen() {
   return (
-      <Memo/>
+    <View style={{ padding: 30 }}>
+      <Stack.Screen options={{ title: 'ホーム' }} />
+      <Text>ホーム</Text>
+      {/* <MemoStructure/> */}
+      <MemoPage/>
+      
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});

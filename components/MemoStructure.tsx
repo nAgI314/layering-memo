@@ -8,7 +8,7 @@ interface MemoLayer {
 // type j = j[] | string[]; 
 
 
-export const MemoPage = () => {
+export const MemoStructure = () => {
   const [memo,setMemo] = useState<MemoLayer>(
     {
       contents : [],
