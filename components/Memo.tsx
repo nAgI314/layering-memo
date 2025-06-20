@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Image, StyleSheet } from 'react-native';
+import { Image, Pressable, StyleSheet } from 'react-native';
 
 interface MemoLayer { 
   contents : (MemoLayer | string )[],
@@ -32,7 +32,7 @@ const MemoLayer = () => {
     setMemoContent(writed);
   } 
   const makeLayer = () => {
-
+    alert("ボタンが押されました");
   }
   return(
   <div>
@@ -43,9 +43,8 @@ const MemoLayer = () => {
       </tr>
       <tr>
         <td><textarea onChange={write}>{memoContent}</textarea></td>
-        <td><Image style={styles.Image} source={require("../assets/images/shovel-white-small.png")} /></td>
+        <td><Pressable onPress={() => makeLayer()}><Image style={styles.Image} source={require("../assets/images/shovel-white-small.png")} /></Pressable></td>
       </tr>
-    
     </table>
   </div>
   )
