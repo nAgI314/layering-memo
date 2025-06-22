@@ -5,8 +5,6 @@ interface MemoLayer {
   contents : (MemoLayer | string )[],
   level : number,
 }
-// type j = j[] | string[]; 
-
 
 export const MemoPage = () => {
   const [memo,setMemo] = useState<MemoLayer>(
@@ -15,17 +13,13 @@ export const MemoPage = () => {
       level : 0,
     }
   );
-
-
-
+  const [focusedMemo, setFocusedMemo] = useState<MemoLayer>(memo);
   return(
-  
-   <MemoLayerComponent memo={memo} onUpdate={setMemo} />
-
+   <MemoLayerComponent memo={memo} onUpdate={setMemo} focused_memo={focusedMemo} setFocusedMemo={setFocusedMemo}/>
   )
 }
 
-const MemoLayerComponent = ({ memo, onUpdate }: { memo: MemoLayer, onUpdate: (updated: MemoLayer) => void }) => {
+const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { memo: MemoLayer, onUpdate: (updated: MemoLayer) => void, focused_memo:MemoLayer, setFocusedMemo: (layer: MemoLayer) => void;}) => {
   const handleTextChange = (index: number, text: string) => {
     const newContents = [...memo.contents];
     newContents[index] = text;
@@ -33,7 +27,10 @@ const MemoLayerComponent = ({ memo, onUpdate }: { memo: MemoLayer, onUpdate: (up
   };
 
   const addMemo = () => {
-    onUpdate({ ...memo, contents: [...memo.contents, ""] });
+    console.log("eee");
+    const newMemo = { ...memo, contents: [...memo.contents, ""] };
+    onUpdate(newMemo);
+    setFocusedMemo(newMemo);
   };
 
   const addLayer = (index: number) => {
@@ -44,13 +41,14 @@ const MemoLayerComponent = ({ memo, onUpdate }: { memo: MemoLayer, onUpdate: (up
     const newContents = [...memo.contents];
     newContents.splice(index + 1, 0, newLayer);
     onUpdate({ ...memo, contents: newContents });
+    setFocusedMemo(newLayer);
   };
 
   return (
-    <View style={[styles.layer, { marginLeft: memo.level * 20 }]}>
-      {memo.contents.map((item, index) => (
+    <View style={[styles.layer, { marginLeft: focused_memo.level * 20 }]}>
+      {focused_memo.contents.map((item, index) => (
         <View key={index} style={styles.row}>
-          {typeof item === 'string' ? (
+          {typeof item === 'string' &&
             <>
               <TextInput
                 value={item}
@@ -65,16 +63,7 @@ const MemoLayerComponent = ({ memo, onUpdate }: { memo: MemoLayer, onUpdate: (up
                 />
               </Pressable>
             </>
-          ) : (
-            <MemoLayerComponent
-              memo={item}
-              onUpdate={(updatedChild) => {
-                const newContents = [...memo.contents];
-                newContents[index] = updatedChild;
-                onUpdate({ ...memo, contents: newContents });
-              }}
-            />
-          )}
+          }
         </View>
       ))}
       <Pressable onPress={addMemo} style={styles.addButton}>
