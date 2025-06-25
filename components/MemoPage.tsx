@@ -45,28 +45,29 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
     setFocusedMemo({ ...focused_memo, contents: [...focused_memo.contents, ""] });
   };
 
-  const addLayer = (index: number) => {
-  const item = memo.contents[index];
-  const name = typeof item === 'string' ? item : item.name;
-
-  console.log(focused_memo)
-  const newLayer: MemoLayer = {
-    contents: [],
-    level: memo.level + 1,
-    name: name,
-    id: 0, //
+  const addLayer = (memoName:string,index:number) => {
+    // console.log(focused_memo)
+    const newLayer: MemoLayer = {
+      contents: [],
+      level: focused_memo.level + 1,
+      name: memoName,
+      id: 0, 
+    };
+    //下の二行くらいうまくいっていない、focused_memoの変更はできているが、おおもとのmemoの変更が難しそうである。
+    //おそらく、引数として受け取ったLayerを一個上のLayerのcontentsに登録する関数を作って、再帰的に呼び出せばいけそう。
+    const newContents = [...memo.contents];
+    newContents.splice(index + 1, 0, newLayer);
+    onUpdate({ ...memo, contents: newContents });
+    setFocusedMemo(newLayer);
   };
 
-  const newContents = [...memo.contents];
-  newContents.splice(index + 1, 0, newLayer);
-  onUpdate({ ...memo, contents: newContents });
-  setFocusedMemo(newLayer);
-};
-
+  const moveLayer = (_memo:MemoLayer) => {
+    setFocusedMemo(_memo);
+  };
 
   const backLayer = () => {
     setFocusedMemo(memo);
-  }
+  };
 
   return (
     <View style={[styles.layer, { marginLeft: focused_memo.level * 20 }]}>
@@ -77,8 +78,9 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
           </View>
         </Pressable>
       )}
+      {focused_memo.name}
       {focused_memo.contents.map((item, index) => (
-        <View key={index} style={styles.row}>
+        <View key={index} style={styles.row}>          
           {typeof item === 'string' ?
             <>
               <TextInput
@@ -87,7 +89,7 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
                 style={styles.input}
                 placeholder="メモを入力"
               />
-              <Pressable onPress={() => addLayer(index)}>
+              <Pressable onPress={() => addLayer(item, index)}>
                 <Image
                   source={require('../assets/images/shovel-black-small.png')}
                   style={styles.image}
@@ -102,7 +104,7 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
                 style={styles.input}
                 placeholder="メモを入力"
               />
-              <Pressable onPress={() => addLayer(index)}>
+              <Pressable onPress={() => moveLayer(item)}>
                 <AntDesign name="arrowright" size={30}/>
               </Pressable>
             </>
