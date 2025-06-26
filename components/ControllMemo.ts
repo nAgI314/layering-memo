@@ -48,14 +48,19 @@ export const addToMainMemo = (mainMemo:MemoLayer, addMemo:MemoLayer):MemoLayer =
   
   
   const makeAddLayer = (_addLayer: MemoLayer): MemoLayer => {
-    const baseRoot = addMemo.idRoot;
+    const baseRoot = _addLayer.idRoot;
     baseRoot.pop(); 
     const toAddLayer = searchMemo(mainMemo, baseRoot);
     // console.log(toAddLayer);
-    toAddLayer.contents.push(addMemo);
+    toAddLayer.contents.push(_addLayer);
     console.log(toAddLayer);
-
-    return _addLayer;
+    
+    //mainのメモまで来たかどうかを確認
+    if(Object.is(toAddLayer.idRoot,[0])){
+      return toAddLayer;
+    } else {
+      return makeAddLayer(toAddLayer);
+    }
   };
   return makeAddLayer(addMemo);
 }

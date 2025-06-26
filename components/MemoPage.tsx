@@ -65,6 +65,8 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
     // const newContents = [...focused_memo.contents];
     // newContents.splice(index + 1, 0, newLayer);
     // onUpdate({ ...focused_memo, contents: newContents });
+    
+    
     addToMainMemo(memo, newLayer);
     setFocusedMemo(newLayer);
   };
