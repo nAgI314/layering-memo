@@ -1,12 +1,14 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import React, { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+// import { addToMainMemo } from './ControllMemo';
 
 export interface MemoLayer { 
   name : string,
   contents : (MemoLayer | string )[],
   level : number,
-  id : number
+  id : number,
+  parentId : number,
 }
 
 export const MemoPage = () => {
@@ -15,7 +17,8 @@ export const MemoPage = () => {
       name: "main",
       contents : [],
       level : 0,
-      id : 0
+      id : 0,
+      parentId : 0
     }
   );
   const [focusedMemo, setFocusedMemo] = useState<MemoLayer>(memo);
@@ -28,12 +31,12 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
 
   const handleTextChange = (index: number, text: string) => {
     // console.log("ok");
-    const newContents = [...memo.contents];
+    // const newContents = [...memo.contents];
     const focused_newContents = [...focused_memo.contents];
-    newContents[index] = text;
+    // newContents[index] = text;
     focused_newContents[index] = text;
-    console.log(newContents);
-    onUpdate({ ...memo, contents: newContents });
+    console.log(focused_newContents);
+    // onUpdate({ ...memo, contents: newContents });
     setFocusedMemo({ ...focused_memo, contents: focused_newContents});
     // set_Memo(focused_memo);
   };
@@ -51,13 +54,17 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
       contents: [],
       level: focused_memo.level + 1,
       name: memoName,
-      id: 0, 
+      id: index, 
+      parentId:0
     };
+    console.log(memo);
+    // const thisLayer:MemoLayer = {..focused_memo, contents:[newLayer]}
     //下の二行くらいうまくいっていない、focused_memoの変更はできているが、おおもとのmemoの変更が難しそうである。
     //おそらく、引数として受け取ったLayerを一個上のLayerのcontentsに登録する関数を作って、再帰的に呼び出せばいけそう。
-    const newContents = [...memo.contents];
-    newContents.splice(index + 1, 0, newLayer);
-    onUpdate({ ...memo, contents: newContents });
+    // onUpdate(addToMainMemo(memo,newLayer));
+    // const newContents = [...focused_memo.contents];
+    // newContents.splice(index + 1, 0, newLayer);
+    // onUpdate({ ...focused_memo, contents: newContents });
     setFocusedMemo(newLayer);
   };
 
@@ -69,16 +76,17 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
     setFocusedMemo(memo);
   };
 
+
   return (
-    <View style={[styles.layer, { marginLeft: focused_memo.level * 20 }]}>
-      {focused_memo.level === 1 && (
+    <View style={styles.layer}>
+      {!(focused_memo.level === 0) && (
         <Pressable onPress={() => backLayer()}>
           <View>
             <AntDesign name="back" size={40}/>
           </View>
         </Pressable>
       )}
-      {focused_memo.name}
+      <Text>{focused_memo.name}</Text>
       {focused_memo.contents.map((item, index) => (
         <View key={index} style={styles.row}>          
           {typeof item === 'string' ?

@@ -1,8 +1,10 @@
 import { MemoLayer } from "./MemoPage";
 
 export const searchMemo= (memo:MemoLayer, level:number, id:number) : MemoLayer => {
+
+  //見つけたLevelの層で、ほしいidのメモを抽出する関数がいる
   
-  
+
   const searchLevel = (_memoArray:MemoLayer[], _level:number):(MemoLayer|string)[] => {
     //探したいlevelのメモだけ抽出
     if(_level === 1){
@@ -29,6 +31,14 @@ export const searchMemo= (memo:MemoLayer, level:number, id:number) : MemoLayer =
       }
     }
   }
-
   return memo;
+}
+
+export const addToMainMemo = (mainMemo:MemoLayer, addMemo:MemoLayer):MemoLayer => {
+  const makeAddLayer = (_addLayer: MemoLayer): MemoLayer => {
+    
+
+    return _addLayer;
+  };
+  return makeAddLayer(addMemo);
 }
