@@ -1,14 +1,14 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import React, { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { searchMemo } from './ControllMemo';
 // import { addToMainMemo } from './ControllMemo';
 
 export interface MemoLayer { 
   name : string,
   contents : (MemoLayer | string )[],
-  level : number,
   id : number,
-  parentId : number,
+  idRoot : number[],
 }
 
 export const MemoPage = () => {
@@ -16,9 +16,8 @@ export const MemoPage = () => {
     {
       name: "main",
       contents : [],
-      level : 0,
       id : 0,
-      parentId : 0
+      idRoot : [0]
     }
   );
   const [focusedMemo, setFocusedMemo] = useState<MemoLayer>(memo);
@@ -42,6 +41,7 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
   };
 
   const addMemo = () => {
+    console.log(searchMemo(memo,[0,0,1]));
     // console.log("eee");
     const newMemo = { ...memo, contents: [...memo.contents, ""] };
     onUpdate(newMemo);
@@ -50,12 +50,13 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
 
   const addLayer = (memoName:string,index:number) => {
     // console.log(focused_memo)
+    const root = focused_memo.idRoot;
+    root.push(index);
     const newLayer: MemoLayer = {
       contents: [],
-      level: focused_memo.level + 1,
       name: memoName,
       id: index, 
-      parentId:0
+      idRoot: root
     };
     console.log(memo);
     // const thisLayer:MemoLayer = {..focused_memo, contents:[newLayer]}
@@ -79,7 +80,7 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
 
   return (
     <View style={styles.layer}>
-      {!(focused_memo.level === 0) && (
+      {!(focused_memo.idRoot.length === 1) && (
         <Pressable onPress={() => backLayer()}>
           <View>
             <AntDesign name="back" size={40}/>

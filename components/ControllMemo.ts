@@ -1,37 +1,61 @@
 import { MemoLayer } from "./MemoPage";
 
-export const searchMemo= (memo:MemoLayer, level:number, id:number) : MemoLayer => {
+export const searchMemo= (memo:MemoLayer,idRoot:number[]) : MemoLayer => {
 
   //見つけたLevelの層で、ほしいidのメモを抽出する関数がいる
+  const searchId = (leveledMemo:(MemoLayer|string)[]) => {
+    console.log(leveledMemo.map((e) => {
+      if(typeof e === "string"){
+
+      } else {
+        // if(e.parentId === parentId && e.id == id){
+        //   return e
+        // }
+      }
+
+    }));
+  } 
+
+  const searchNext = (idIndex:number):MemoLayer => {
+    //idIndexはidRootの前から何番目を探しているか
+    let isCorrect = false;  
+    if(idRoot.length === 1){
+      return memo;
+    } else {
+      if (idRoot.length -1  === idIndex) {
+        isCorrect =true;
+      }
+
+      const nextMemo = memo.contents.map((e)=>{
+        if(typeof e === "string"){
+
+        } else if(e.id === idRoot[idIndex]){
+          return e;
+        }
+      })[0];
+      if(!nextMemo){
+        console.log("そのメモはありません");
+        return {
+          name:"404",
+          contents : [],
+          id : -1,
+          idRoot : [-1]
+        }
+        // throw new Error();
+      }
+
+      if (isCorrect){
+        return nextMemo;
+      } else {
+        return searchNext(idIndex + 1);
+      }
+    
+    } 
+  }
   
 
-  const searchLevel = (_memoArray:MemoLayer[], _level:number):(MemoLayer|string)[] => {
-    //探したいlevelのメモだけ抽出
-    if(_level === 1){
-      return _memoArray;
-    } else {
-      let isCorrectLevel = false;
-      const nextLevelMemo:MemoLayer[] = [];
-      _memoArray.map((e) => {
-        e.contents.map((_e) => {
-        if (typeof _e === "string"){
-          //そのレベルがない?
-        } else {
-          if(_e.level === _level){
-            isCorrectLevel = true; 
-          }
-          nextLevelMemo.push(_e);
-        }
-        })
-      })
-      if (isCorrectLevel){
-        return nextLevelMemo;
-      } else {
-        return searchLevel(nextLevelMemo,_level);
-      }
-    }
-  }
-  return memo;
+  // searchId([memo]);
+  return searchNext(0);
 }
 
 export const addToMainMemo = (mainMemo:MemoLayer, addMemo:MemoLayer):MemoLayer => {
