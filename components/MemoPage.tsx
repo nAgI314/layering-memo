@@ -22,11 +22,11 @@ export const MemoPage = () => {
   );
   const [focusedMemo, setFocusedMemo] = useState<MemoLayer>(memo);
   return(
-   <MemoLayerComponent memo={memo} onUpdate={setMemo} focused_memo={focusedMemo} setFocusedMemo={setFocusedMemo}/>
+   <MemoLayerComponent memo={memo} _setMemo={setMemo} focused_memo={focusedMemo} _setFocusedMemo={setFocusedMemo}/>
   )
 }
 
-const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { memo: MemoLayer, onUpdate: (updated: MemoLayer) => void, focused_memo:MemoLayer, setFocusedMemo: (layer: MemoLayer) => void;}) => {
+const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { memo: MemoLayer, _setMemo: (updated: MemoLayer) => void, focused_memo:MemoLayer, _setFocusedMemo: (layer: MemoLayer) => void;}) => {
 
   const handleTextChange = (index: number, text: string) => {
     // const newContents = [...memo.contents];
@@ -34,22 +34,24 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
     // newContents[index] = text;
     focused_newContents[index] = text;
     console.log(focused_newContents);
-    // onUpdate({ ...memo, contents: newContents });
-    setFocusedMemo({ ...focused_memo, contents: focused_newContents});
+    // _setMemo({ ...memo, contents: newContents });
+    _setFocusedMemo({ ...focused_memo, contents: focused_newContents});
     // set_Memo(focused_memo);
   };
 
   const addMemo = () => {
     // console.log(searchMemo(memo,[0,0,1]));
 
-    const newMemo = { ...memo, contents: [...memo.contents, ""] };
-    onUpdate(newMemo);
-    setFocusedMemo({ ...focused_memo, contents: [...focused_memo.contents, ""] });
+    // const newMemo = { ...memo, contents: [...memo.contents, ""] };
+    // _setMemo(newMemo);
+    _setFocusedMemo({ ...focused_memo, contents: [...focused_memo.contents, ""] });
   };
 
   const addLayer = (memoName:string,index:number) => {
     // console.log(focused_memo)
-    const root = focused_memo.idRoot;
+    const root = Object.assign({},focused_memo).idRoot;
+    // const root = focused_memo.idRoot;s
+
     root.push(index);
     const newLayer: MemoLayer = {
       contents: [],
@@ -57,26 +59,22 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
       id: index, 
       idRoot: root
     };
-    // console.log(memo);
-    // const thisLayer:MemoLayer = {..focused_memo, contents:[newLayer]}
-    //下の二行くらいうまくいっていない、focused_memoの変更はできているが、おおもとのmemoの変更が難しそうである。
-    //おそらく、引数として受け取ったLayerを一個上のLayerのcontentsに登録する関数を作って、再帰的に呼び出せばいけそう。
-    // onUpdate(addToMainMemo(memo,newLayer));
-    // const newContents = [...focused_memo.contents];
-    // newContents.splice(index + 1, 0, newLayer);
-    // onUpdate({ ...focused_memo, contents: newContents });
-    
-    
-    addToMainMemo(memo, newLayer);
-    setFocusedMemo(newLayer);
+     console.log(memo);
+    // const parentLayer:MemoLayer = {
+    //   ...focused_memo,
+    //   contents : [newLayer],
+    // }
+    _setMemo(addToMainMemo(memo, newLayer));
+    // console.log(addToMainMemo(memo, newLayer));
+    _setFocusedMemo(newLayer);
   };
 
   const moveLayer = (_memo:MemoLayer) => {
-    setFocusedMemo(_memo);
+    _setFocusedMemo(_memo);
   };
 
   const backLayer = () => {
-    setFocusedMemo(memo);
+    _setFocusedMemo(memo);
   };
 
 
