@@ -2,20 +2,6 @@ import { MemoLayer } from "./MemoPage";
 
 export const searchMemo= (memo:MemoLayer,idRoot:number[]) : MemoLayer => {
 
-  //見つけたLevelの層で、ほしいidのメモを抽出する関数がいる
-  const searchId = (leveledMemo:(MemoLayer|string)[]) => {
-    console.log(leveledMemo.map((e) => {
-      if(typeof e === "string"){
-
-      } else {
-        // if(e.parentId === parentId && e.id == id){
-        //   return e
-        // }
-      }
-
-    }));
-  } 
-
   const searchNext = (idIndex:number):MemoLayer => {
     //idIndexはidRootの前から何番目を探しているか
     let isCorrect = false;  
@@ -59,8 +45,15 @@ export const searchMemo= (memo:MemoLayer,idRoot:number[]) : MemoLayer => {
 }
 
 export const addToMainMemo = (mainMemo:MemoLayer, addMemo:MemoLayer):MemoLayer => {
+  
+  
   const makeAddLayer = (_addLayer: MemoLayer): MemoLayer => {
-    
+    const baseRoot = addMemo.idRoot;
+    baseRoot.pop(); 
+    const toAddLayer = searchMemo(mainMemo, baseRoot);
+    // console.log(toAddLayer);
+    toAddLayer.contents.push(addMemo);
+    console.log(toAddLayer);
 
     return _addLayer;
   };

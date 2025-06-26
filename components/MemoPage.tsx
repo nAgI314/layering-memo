@@ -1,7 +1,7 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import React, { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { searchMemo } from './ControllMemo';
+import { addToMainMemo } from './ControllMemo';
 // import { addToMainMemo } from './ControllMemo';
 
 export interface MemoLayer { 
@@ -29,7 +29,6 @@ export const MemoPage = () => {
 const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { memo: MemoLayer, onUpdate: (updated: MemoLayer) => void, focused_memo:MemoLayer, setFocusedMemo: (layer: MemoLayer) => void;}) => {
 
   const handleTextChange = (index: number, text: string) => {
-    // console.log("ok");
     // const newContents = [...memo.contents];
     const focused_newContents = [...focused_memo.contents];
     // newContents[index] = text;
@@ -41,8 +40,8 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
   };
 
   const addMemo = () => {
-    console.log(searchMemo(memo,[0,0,1]));
-    // console.log("eee");
+    // console.log(searchMemo(memo,[0,0,1]));
+
     const newMemo = { ...memo, contents: [...memo.contents, ""] };
     onUpdate(newMemo);
     setFocusedMemo({ ...focused_memo, contents: [...focused_memo.contents, ""] });
@@ -58,7 +57,7 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
       id: index, 
       idRoot: root
     };
-    console.log(memo);
+    // console.log(memo);
     // const thisLayer:MemoLayer = {..focused_memo, contents:[newLayer]}
     //下の二行くらいうまくいっていない、focused_memoの変更はできているが、おおもとのmemoの変更が難しそうである。
     //おそらく、引数として受け取ったLayerを一個上のLayerのcontentsに登録する関数を作って、再帰的に呼び出せばいけそう。
@@ -66,6 +65,7 @@ const MemoLayerComponent = ({ memo, onUpdate ,focused_memo, setFocusedMemo}: { m
     // const newContents = [...focused_memo.contents];
     // newContents.splice(index + 1, 0, newLayer);
     // onUpdate({ ...focused_memo, contents: newContents });
+    addToMainMemo(memo, newLayer);
     setFocusedMemo(newLayer);
   };
 
