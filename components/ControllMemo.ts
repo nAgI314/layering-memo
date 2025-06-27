@@ -9,7 +9,7 @@ export const searchMemo = (memo:MemoLayer,idRoot:number[]) : MemoLayer => {
     if(idRoot.length === 1){
       return memo;
     } else {
-      if (idRoot.length -1  === idIndex) {
+      if (idRoot.length -2 === idIndex) {
         isCorrect =true;
       }
 
@@ -20,10 +20,16 @@ export const searchMemo = (memo:MemoLayer,idRoot:number[]) : MemoLayer => {
       //     return e;
       //   }
       // })[0];
-      console.log(currentMemo.contents);//なんか、一番最初がemptyになってる。
-      const nextMemo = currentMemo.contents.find((e): e is MemoLayer =>
-        typeof e !== "string" && e.id === idRoot[idIndex]
-      )
+      console.log(currentMemo.contents);
+      
+      // const nextMemo = currentMemo.contents.find((e): e is MemoLayer =>
+      //   typeof e !== "string" && e.id === idRoot[idIndex]
+      // )
+      const nextMemo = currentMemo.contents.find(
+        (e): e is MemoLayer => typeof e === "object" && e !== null && "id" in e && e.id === idRoot[idIndex]
+      );
+      console.log(isCorrect);
+      console.log(nextMemo);
       if(!nextMemo){
         console.log("そのメモはありません");
         return {
@@ -52,9 +58,9 @@ export const searchMemo = (memo:MemoLayer,idRoot:number[]) : MemoLayer => {
 export const addToMainMemo = (mainMemo:MemoLayer, addMemo:MemoLayer):MemoLayer => {
   
   const makeAddLayer = (_addLayer: MemoLayer): MemoLayer => {
-    // const baseRoot = structuredClone(_addLayer).idRoot;
+    const baseRoot = structuredClone(_addLayer).idRoot;
     // const baseRoot = structuredClone(_addLayer.idRoot);
-    const baseRoot = {..._addLayer}.idRoot;    
+    // const baseRoot = {..._addLayer}.idRoot;    
     // console.log(baseRoot);
     baseRoot.pop(); 
     // console.log(baseRoot);

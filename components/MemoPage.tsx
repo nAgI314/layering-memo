@@ -62,7 +62,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
       id: index, 
       idRoot: root
     };
-    // console.log(newLayer.idRoot)
+    console.log(newLayer)
     _setFocusedMemo(newLayer);
     const newMemo = addToMainMemo(memo, structuredClone(newLayer));
     // console.log(newMemo);
