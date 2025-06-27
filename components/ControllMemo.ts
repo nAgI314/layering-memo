@@ -20,6 +20,7 @@ export const searchMemo = (memo:MemoLayer,idRoot:number[]) : MemoLayer => {
       //     return e;
       //   }
       // })[0];
+      console.log(currentMemo.contents);//なんか、一番最初がemptyになってる。
       const nextMemo = currentMemo.contents.find((e): e is MemoLayer =>
         typeof e !== "string" && e.id === idRoot[idIndex]
       )
@@ -59,7 +60,8 @@ export const addToMainMemo = (mainMemo:MemoLayer, addMemo:MemoLayer):MemoLayer =
     // console.log(baseRoot);
     const toAddLayer = searchMemo(structuredClone(mainMemo), baseRoot);
     // console.log(toAddLayer);
-    toAddLayer.contents.push(structuredClone(_addLayer));
+    // toAddLayer.contents.push(structuredClone(_addLayer));
+    toAddLayer.contents[_addLayer.id] = structuredClone(_addLayer);
     // console.log(toAddLayer);
     
     //mainのメモまで来たかどうかを確認

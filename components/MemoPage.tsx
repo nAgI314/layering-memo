@@ -33,7 +33,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
     const focused_newContents = [...focused_memo.contents];
     // newContents[index] = text;
     focused_newContents[index] = text;
-    console.log(focused_newContents);
+    // console.log(focused_newContents);
     // _setMemo({ ...memo, contents: newContents });
     _setFocusedMemo({ ...focused_memo, contents: focused_newContents});
     // set_Memo(focused_memo);
@@ -48,25 +48,26 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
   };
 
   const addLayer = (memoName:string,index:number) => {
-    // console.log(focused_memo)
-    const root = Object.assign({},focused_memo).idRoot;
-    // const root = focused_memo.idRoot;s
 
-    root.push(index);
+    // console.log(focused_memo)
+    // const root = {...focused_memo}.idRoot;
+    const root = [...structuredClone(focused_memo).idRoot, index];
+    // const root = focused_memo.idRoot;s
+    // console.log(index);
+    // root.push(index);
+    console.log(root);
     const newLayer: MemoLayer = {
       contents: [],
       name: memoName,
       id: index, 
       idRoot: root
     };
-     console.log(memo);
-    // const parentLayer:MemoLayer = {
-    //   ...focused_memo,
-    //   contents : [newLayer],
-    // }
-    _setMemo(addToMainMemo(memo, newLayer));
-    // console.log(addToMainMemo(memo, newLayer));
+    // console.log(newLayer.idRoot)
     _setFocusedMemo(newLayer);
+    const newMemo = addToMainMemo(memo, structuredClone(newLayer));
+    // console.log(newMemo);
+    _setMemo(newMemo);
+    // console.log(addToMainMemo(memo, newLayer));
   };
 
   const moveLayer = (_memo:MemoLayer) => {
