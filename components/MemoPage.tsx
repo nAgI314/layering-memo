@@ -2,6 +2,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import React, { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { addToMainMemo } from './ControllMemo';
+import MarkdownEditor from './MarkdownEditor';
 // import { addToMainMemo } from './ControllMemo';
 
 export interface MemoLayer { 
@@ -81,6 +82,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
 
   return (
     <View style={styles.layer}>
+      <MarkdownEditor/>
       {!(focused_memo.idRoot.length === 1) && (
         <Pressable onPress={() => backLayer()}>
           <View>
