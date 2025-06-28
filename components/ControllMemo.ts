@@ -26,7 +26,7 @@ export const searchMemo = (memo:MemoLayer,idRoot:number[]) : MemoLayer => {
       //   typeof e !== "string" && e.id === idRoot[idIndex]
       // )
       const nextMemo = currentMemo.contents.find(
-        (e): e is MemoLayer => typeof e === "object" && e !== null && "id" in e && e.id === idRoot[idIndex]
+        (e): e is MemoLayer => typeof e === "object" && e !== null && "id" in e && e.id === idRoot[idIndex + 1]
       );
       console.log(isCorrect);
       console.log(nextMemo);
@@ -67,6 +67,11 @@ export const addToMainMemo = (mainMemo:MemoLayer, addMemo:MemoLayer):MemoLayer =
     const toAddLayer = searchMemo(structuredClone(mainMemo), baseRoot);
     // console.log(toAddLayer);
     // toAddLayer.contents.push(structuredClone(_addLayer));
+    if(_addLayer.id !== 0){
+      for(let i = 0; i <= _addLayer.id; i++){
+        toAddLayer.contents.push("");
+      }
+    }
     toAddLayer.contents[_addLayer.id] = structuredClone(_addLayer);
     // console.log(toAddLayer);
     
