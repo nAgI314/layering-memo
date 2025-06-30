@@ -41,7 +41,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
     // set_Memo(focused_memo);
     const newLayer = { ...focused_memo, contents: focused_newContents }
     _setFocusedMemo(newLayer);
-    const newMemo = addToMainMemo(memo, structuredClone(newLayer));
+    // const newMemo = addToMainMemo(memo, structuredClone(newLayer));
   };
 
   const addMemo = () => {
@@ -70,12 +70,10 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
       _setMemo({ ...memo, contents: [...memo.contents, ""] });
       console.log({ ...memo, contents: [...memo.contents, ""] });
     } else {
-      console.log(newLayer);
-      const newMemo = addToMainMemo(memo, structuredClone(newLayer));
+      console.log(newFocusedMemo);
+      const newMemo = addToMainMemo(memo, structuredClone(newFocusedMemo));
       _setMemo(newMemo);
     }
-    
-    
   };
 
   const addLayer = (memoName:string,index:number) => {
