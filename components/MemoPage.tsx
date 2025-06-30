@@ -1,9 +1,8 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import React, { useState } from "react";
-import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { addToMainMemo } from './ControllMemo';
 import MarkdownEditor from './MarkdownEditor';
-// import { addToMainMemo } from './ControllMemo';
 
 export interface MemoLayer { 
   name : string,
@@ -53,17 +52,17 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
     // console.log(focused_memo)
     // const root = {...focused_memo}.idRoot;
     const root = [...structuredClone(focused_memo).idRoot, index];
-    // const root = focused_memo.idRoot;s
+    // const root = focused_memo.idRoot;
     // console.log(index);
     // root.push(index);
-    console.log(root);
+    // console.log(root);
     const newLayer: MemoLayer = {
       contents: [],
       name: memoName,
       id: index, 
       idRoot: root
     };
-    console.log(newLayer)
+    // console.log(newLayer)
     _setFocusedMemo(newLayer);
     const newMemo = addToMainMemo(memo, structuredClone(newLayer));
     // console.log(newMemo);
@@ -82,7 +81,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
 
   return (
     <View style={styles.layer}>
-      <MarkdownEditor/>
+      {/* <MarkdownEditor firstText=""/> */}
       {!(focused_memo.idRoot.length === 1) && (
         <Pressable onPress={() => backLayer()}>
           <View>
@@ -94,12 +93,10 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
       {focused_memo.contents.map((item, index) => (
         <View key={index} style={styles.row}>          
           {typeof item === 'string' ?
-            <>
-              <TextInput
+            <View style={styles.eachRow}>
+              <MarkdownEditor
                 value={item}
                 onChangeText={(text: string) => handleTextChange(index, text)}
-                style={styles.input}
-                placeholder="メモを入力"
               />
               <Pressable onPress={() => addLayer(item, index)}>
                 <Image
@@ -107,19 +104,17 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
                   style={styles.image}
                 />
               </Pressable>
-            </>
+            </View>
           : 
-            <>
-              <TextInput
-                value={item.name}
+            <View style={styles.eachRow}>
+              <MarkdownEditor
+                value={item.name}  
                 onChangeText={(text: string) => handleTextChange(index, text)}
-                style={styles.input}
-                placeholder="メモを入力"
               />
               <Pressable onPress={() => moveLayer(item)}>
                 <AntDesign name="arrowright" size={30}/>
               </Pressable>
-            </>
+            </View>
           }
         </View>
       ))}
@@ -140,8 +135,13 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginBottom: 6,
+  },
+  eachRow:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
   },
   input: {
     flex: 1,
