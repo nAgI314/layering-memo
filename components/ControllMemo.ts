@@ -61,7 +61,7 @@ export const addToMainMemo = (mainMemo:MemoLayer, addMemo:MemoLayer):MemoLayer =
     const baseRoot = structuredClone(_addLayer).idRoot;
     // const baseRoot = structuredClone(_addLayer.idRoot);
     // const baseRoot = {..._addLayer}.idRoot;    
-    // console.log(baseRoot);
+    console.log(baseRoot);
     baseRoot.pop(); 
     // console.log(baseRoot);
     const toAddLayer = searchMemo(structuredClone(mainMemo), baseRoot);

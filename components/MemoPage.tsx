@@ -30,22 +30,52 @@ export const MemoPage = () => {
 const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { memo: MemoLayer, _setMemo: (updated: MemoLayer) => void, focused_memo:MemoLayer, _setFocusedMemo: (layer: MemoLayer) => void;}) => {
 
   const handleTextChange = (index: number, text: string) => {
+    console.log(text);
     // const newContents = [...memo.contents];
     const focused_newContents = [...focused_memo.contents];
     // newContents[index] = text;
     focused_newContents[index] = text;
     // console.log(focused_newContents);
     // _setMemo({ ...memo, contents: newContents });
-    _setFocusedMemo({ ...focused_memo, contents: focused_newContents});
+  //  _setFocusedMemo({ ...focused_memo, contents: focused_newContents});
     // set_Memo(focused_memo);
+    const newLayer = { ...focused_memo, contents: focused_newContents }
+    _setFocusedMemo(newLayer);
+    const newMemo = addToMainMemo(memo, structuredClone(newLayer));
   };
 
   const addMemo = () => {
     // console.log(searchMemo(memo,[0,0,1]));
-
+    const cloneFocus = structuredClone(focused_memo);
+    // console.log(cloneFocus);
+    const newIdRoot = structuredClone(cloneFocus).idRoot;
+    newIdRoot.push(structuredClone(cloneFocus).contents.length);
+    const newLayerArray = cloneFocus.contents;
+    const newLayer = {
+      name: "",
+      contents: [""],
+      id: cloneFocus.contents.length,
+      idRoot: newIdRoot,
+    };
+    newLayerArray.push(newLayer);
+    const newFocusedMemo = {
+      ...cloneFocus,
+      contents: newLayerArray,
+    }
     // const newMemo = { ...memo, contents: [...memo.contents, ""] };
     // _setMemo(newMemo);
-    _setFocusedMemo({ ...focused_memo, contents: [...focused_memo.contents, ""] });
+    // const newLayer = { ...focused_memo, contents: [...focused_memo.contents, ""] }
+    _setFocusedMemo(newFocusedMemo);
+    if(cloneFocus.idRoot.length === 1){
+      _setMemo({ ...memo, contents: [...memo.contents, ""] });
+      console.log({ ...memo, contents: [...memo.contents, ""] });
+    } else {
+      console.log(newLayer);
+      const newMemo = addToMainMemo(memo, structuredClone(newLayer));
+      _setMemo(newMemo);
+    }
+    
+    
   };
 
   const addLayer = (memoName:string,index:number) => {
@@ -86,11 +116,10 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
       {!(focused_memo.idRoot.length === 1) && (
         <Pressable onPress={() => backLayer()}>
           <View>
-            <AntDesign name="back" size={40}/>
+            <AntDesign name="back" size={35}/>
           </View>
         </Pressable>
       )}
-      {/* <Text>{focused_memo.name}</Text> */}
       <Markdown>{focused_memo.name}</Markdown>
       {focused_memo.contents.map((item, index) => (
         <View key={index} style={styles.row}>          

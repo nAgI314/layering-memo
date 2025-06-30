@@ -23,7 +23,7 @@ const MarkdownEditor = ({ value, onChangeText }: Props) => {
             borderColor: '#ccc',
             borderWidth: 1,
             borderRadius: 8,
-            padding: 12,
+            padding: 10,
             textAlignVertical: 'top',
           }}
           multiline
