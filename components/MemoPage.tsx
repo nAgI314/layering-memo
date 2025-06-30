@@ -1,6 +1,7 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
+import cloneDeep from 'lodash/cloneDeep';
 import React, { useState } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 import { addToMainMemo } from './ControllMemo';
 import MarkdownEditor from './MarkdownEditor';
@@ -41,15 +42,21 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
     // set_Memo(focused_memo);
     const newLayer = { ...focused_memo, contents: focused_newContents }
     _setFocusedMemo(newLayer);
-    // const newMemo = addToMainMemo(memo, structuredClone(newLayer));
+    console.log(newLayer);
+    if(focused_memo.idRoot.length === 1){
+      _setMemo(newLayer);
+    } else {
+      const newMemo = addToMainMemo(memo, cloneDeep(newLayer));
+      _setMemo(newMemo);
+    }
   };
 
   const addMemo = () => {
     // console.log(searchMemo(memo,[0,0,1]));
-    const cloneFocus = structuredClone(focused_memo);
+    const cloneFocus = cloneDeep(focused_memo);
     // console.log(cloneFocus);
-    const newIdRoot = structuredClone(cloneFocus).idRoot;
-    newIdRoot.push(structuredClone(cloneFocus).contents.length);
+    const newIdRoot = cloneDeep(cloneFocus).idRoot;
+    newIdRoot.push(cloneDeep(cloneFocus).contents.length);
     const newLayerArray = cloneFocus.contents;
     const newLayer = {
       name: "",
@@ -71,7 +78,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
       console.log({ ...memo, contents: [...memo.contents, ""] });
     } else {
       console.log(newFocusedMemo);
-      const newMemo = addToMainMemo(memo, structuredClone(newFocusedMemo));
+      const newMemo = addToMainMemo(memo, cloneDeep(newFocusedMemo));
       _setMemo(newMemo);
     }
   };
@@ -80,7 +87,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
 
     // console.log(focused_memo)
     // const root = {...focused_memo}.idRoot;
-    const root = [...structuredClone(focused_memo).idRoot, index];
+    const root = [...cloneDeep(focused_memo).idRoot, index];
     // const root = focused_memo.idRoot;
     // console.log(index);
     // root.push(index);
@@ -93,7 +100,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
     };
     // console.log(newLayer)
     _setFocusedMemo(newLayer);
-    const newMemo = addToMainMemo(memo, structuredClone(newLayer));
+    const newMemo = addToMainMemo(memo, cloneDeep(newLayer));
     // console.log(newMemo);
     _setMemo(newMemo);
     // console.log(addToMainMemo(memo, newLayer));
@@ -109,7 +116,8 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
 
 
   return (
-    <View style={styles.layer}>
+    <ScrollView style={styles.layer}>
+      
       {/* <MarkdownEditor firstText=""/> */}
       {!(focused_memo.idRoot.length === 1) && (
         <Pressable onPress={() => backLayer()}>
@@ -150,7 +158,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
       <Pressable onPress={addMemo} style={styles.addButton}>
         <Text style={styles.addButtonText}>メモを追加</Text>
       </Pressable>
-    </View>
+    </ScrollView>
   );
 };
 

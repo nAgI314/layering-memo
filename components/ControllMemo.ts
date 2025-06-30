@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash/cloneDeep';
 import { MemoLayer } from "./MemoPage";
 
 export const searchMemo = (memo:MemoLayer,idRoot:number[]) : MemoLayer => {
@@ -58,21 +59,21 @@ export const searchMemo = (memo:MemoLayer,idRoot:number[]) : MemoLayer => {
 export const addToMainMemo = (mainMemo:MemoLayer, addMemo:MemoLayer):MemoLayer => {
   
   const makeAddLayer = (_addLayer: MemoLayer): MemoLayer => {
-    const baseRoot = structuredClone(_addLayer).idRoot;
-    // const baseRoot = structuredClone(_addLayer.idRoot);
+    const baseRoot = cloneDeep(_addLayer).idRoot;
+    // const baseRoot = cloneDeep(_addLayer.idRoot);
     // const baseRoot = {..._addLayer}.idRoot;    
     console.log(baseRoot);
     baseRoot.pop(); 
     // console.log(baseRoot);
-    const toAddLayer = searchMemo(structuredClone(mainMemo), baseRoot);
+    const toAddLayer = searchMemo(cloneDeep(mainMemo), baseRoot);
     // console.log(toAddLayer);
-    // toAddLayer.contents.push(structuredClone(_addLayer));
+    // toAddLayer.contents.push(cloneDeep(_addLayer));
     if(toAddLayer.contents[_addLayer.id - 1] == undefined ){
       for(let i = 0; i <= _addLayer.id; i++){
         toAddLayer.contents.push("");
       }
     }
-    toAddLayer.contents[_addLayer.id] = structuredClone(_addLayer);
+    toAddLayer.contents[_addLayer.id] = cloneDeep(_addLayer);
     // console.log(toAddLayer);
     
     //mainのメモまで来たかどうかを確認
