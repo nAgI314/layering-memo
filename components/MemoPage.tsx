@@ -1,6 +1,7 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import React, { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import Markdown from 'react-native-markdown-display';
 import { addToMainMemo } from './ControllMemo';
 import MarkdownEditor from './MarkdownEditor';
 
@@ -89,7 +90,8 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
           </View>
         </Pressable>
       )}
-      <Text>{focused_memo.name}</Text>
+      {/* <Text>{focused_memo.name}</Text> */}
+      <Markdown>{focused_memo.name}</Markdown>
       {focused_memo.contents.map((item, index) => (
         <View key={index} style={styles.row}>          
           {typeof item === 'string' ?
