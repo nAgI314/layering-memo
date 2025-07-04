@@ -62,7 +62,7 @@ export const addToMainMemo = (mainMemo:MemoLayer, addMemo:MemoLayer):MemoLayer =
     const baseRoot = cloneDeep(_addLayer).idRoot;
     // const baseRoot = cloneDeep(_addLayer.idRoot);
     // const baseRoot = {..._addLayer}.idRoot;    
-    console.log(baseRoot);
+    // console.log(baseRoot);
     baseRoot.pop(); 
     // console.log(baseRoot);
     const toAddLayer = searchMemo(cloneDeep(mainMemo), baseRoot);
