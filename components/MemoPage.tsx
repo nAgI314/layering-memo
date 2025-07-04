@@ -30,6 +30,7 @@ export const MemoPage = () => {
 }
 
 const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { memo: MemoLayer, _setMemo: (updated: MemoLayer) => void, focused_memo:MemoLayer, _setFocusedMemo: (layer: MemoLayer) => void;}) => {
+  const [isPreview,setIsPreview] = useState<boolean>(true);
 
   const handleTextChange = (index: number, text: string) => {
     console.log(text);
@@ -132,7 +133,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
               メモ
             </Text>
           </View>
-          <Pressable onPress={() => backLayer()}>
+          <Pressable onPress={() => setIsPreview((prev)=>!prev)}>
             <View>
               <AntDesign name="edit" size={25}/>
             </View>
@@ -145,7 +146,8 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
           {typeof item === 'string' ?
             <View style={styles.eachRow}>
               <MarkdownEditor
-                isPreview={true}
+                isPreview={isPreview}
+                onChangeIsPre={setIsPreview}
                 value={item}
                 onChangeText={(text: string) => handleTextChange(index, text)}
               />
@@ -159,7 +161,8 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
           : 
             <View style={styles.eachRow}>
               <MarkdownEditor
-                isPreview={true}
+                isPreview={isPreview}
+                onChangeIsPre={setIsPreview}
                 value={item.name}  
                 onChangeText={(text: string) => handleTextChange(index, text)}
               />
@@ -170,9 +173,11 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
           }
         </View>
       ))}
-      <Pressable onPress={addMemo} style={styles.addButton}>
-        <Text style={styles.addButtonText}>メモを追加</Text>
-      </Pressable>
+      {!isPreview && 
+        <Pressable onPress={addMemo} style={styles.addButton}>
+          <Text style={styles.addButtonText}>メモを追加</Text>
+        </Pressable>
+      }  
     </ScrollView>
     </View>
   );
