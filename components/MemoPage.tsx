@@ -22,6 +22,7 @@ export const MemoPage = () => {
       idRoot : [0]
     }
   );
+  console.log(memo);
   const [focusedMemo, setFocusedMemo] = useState<MemoLayer>(memo);
   return(
    <MemoLayerComponent memo={memo} _setMemo={setMemo} focused_memo={focusedMemo} _setFocusedMemo={setFocusedMemo}/>
@@ -116,22 +117,35 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
 
 
   return (
-    <ScrollView style={styles.layer}>
+    <View>
       
-      {/* <MarkdownEditor firstText=""/> */}
-      {!(focused_memo.idRoot.length === 1) && (
-        <Pressable onPress={() => backLayer()}>
+
+
+        <View style={styles.header}>
+          <Pressable onPress={() => backLayer()}>
+            <View>
+              <AntDesign name="back" size={25}/>
+            </View>
+          </Pressable>
           <View>
-            <AntDesign name="back" size={35}/>
+            <Text style={styles.title}>
+              メモ
+            </Text>
           </View>
-        </Pressable>
-      )}
+          <Pressable onPress={() => backLayer()}>
+            <View>
+              <AntDesign name="edit" size={25}/>
+            </View>
+          </Pressable>
+        </View>
+      <ScrollView style={styles.layer}>
       <Markdown>{focused_memo.name}</Markdown>
       {focused_memo.contents.map((item, index) => (
         <View key={index} style={styles.row}>          
           {typeof item === 'string' ?
             <View style={styles.eachRow}>
               <MarkdownEditor
+                isPreview={true}
                 value={item}
                 onChangeText={(text: string) => handleTextChange(index, text)}
               />
@@ -145,6 +159,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
           : 
             <View style={styles.eachRow}>
               <MarkdownEditor
+                isPreview={true}
                 value={item.name}  
                 onChangeText={(text: string) => handleTextChange(index, text)}
               />
@@ -159,11 +174,31 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
         <Text style={styles.addButtonText}>メモを追加</Text>
       </Pressable>
     </ScrollView>
+    </View>
   );
 };
 
 
 const styles = StyleSheet.create({
+  header: {
+    backgroundColor: '#e1e1e1',
+    paddingTop: 40,
+    paddingBottom: 12,
+    paddingHorizontal: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomColor: '#ddd',
+    borderBottomWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  title: {
+    fontSize:20,
+  },
   arrow: {
     borderWidth: 2,
   },

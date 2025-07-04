@@ -5,12 +5,13 @@ import Markdown from 'react-native-markdown-display';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 type Props = {
+  isPreview: boolean;
   value: string;
   onChangeText: (text: string) => void;
 };
 
-const MarkdownEditor = ({ value, onChangeText }: Props) => {
-  const [showPreview, setShowPreview] = useState(false);
+const MarkdownEditor = ({isPreview, value, onChangeText }: Props) => {
+  const [showPreview, setShowPreview] = useState(isPreview);
   const textInputRef = useRef<TextInput>(null);
 
   return (
@@ -35,7 +36,7 @@ const MarkdownEditor = ({ value, onChangeText }: Props) => {
       ) : (
         <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
           <View style={{ flex: 1 }}>
-            <Markdown>{value || '*プレビューする内容がありません。*'}</Markdown>
+            <Markdown>{value || '*empty*'}</Markdown>
           </View>
           <Pressable
             onPress={() => {

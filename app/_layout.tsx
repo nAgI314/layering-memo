@@ -19,10 +19,16 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: true }} />
+      <Stack 
+        screenOptions={{
+          headerShown: false, // ← ヘッダーを非表示にする
+        }}
+      />
+      {/* <Stack /> */}
+      {/* <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
-      </Stack>
+      </Stack> */}
       <StatusBar style="auto" />
     </ThemeProvider>
   );

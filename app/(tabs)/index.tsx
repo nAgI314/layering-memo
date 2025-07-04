@@ -5,7 +5,7 @@ import { View } from 'react-native';
 export default function Home() {
 
   return (
-    <View style={{ padding: 30 }}>
+    <View >
       <Stack.Screen options={{ title: 'メモ' }} />
       {/* <MemoStructure/> */}
       <MemoPage/>
