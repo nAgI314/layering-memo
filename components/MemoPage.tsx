@@ -1,4 +1,5 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Feather from '@expo/vector-icons/Feather';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useState } from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -134,16 +135,8 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
               </View>
             </Pressable>
           </View>
-          {/* <Pressable onPress={() => backLayer()}>
-            <View>
-              <AntDesign name="back" size={35}/>
-            </View>
-          </Pressable> */}
           <View>
-            {/* <Text style={styles.title}>
-              メモ
-            </Text> */}
-            <Markdown style={markdownStyles}>{focused_memo.name}</Markdown>
+            <Markdown style={markdownTitleStyles}>{focused_memo.name}</Markdown>
           </View>
           <View style={styles.buttonGroup}>
             <Pressable onPress={() => setIsPreview((prev)=>!prev)}>
@@ -177,12 +170,17 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
                 onChangeText={(text: string) => handleTextChange(index, text)}
               />
               {!isPreview &&
+              <View style={styles.buttonGroup}>
+                <Pressable>
+                  <Feather name="more-vertical" size={20} color="black" />
+                </Pressable>
                 <Pressable onPress={() => addLayer(item, index)}>
                   <Image
                     source={require('../assets/images/shovel-black-small.png')}
                     style={styles.image}
                   />
                 </Pressable>
+              </View>
               }
             </View>
           : 
@@ -193,9 +191,20 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
                 value={item.name}  
                 onChangeText={(text: string) => handleTextChange(index, text)}
               />
+              {!isPreview ?
+              <View style={styles.buttonGroup}>
+                <Pressable>
+                  <Feather name="more-vertical" size={20} color="black" />
+                </Pressable>
+                <Pressable onPress={() => moveLayer(item)}>
+                  <AntDesign name="arrowright" size={30}/>
+                </Pressable>
+              </View>
+              :
               <Pressable onPress={() => moveLayer(item)}>
                 <AntDesign name="arrowright" size={30}/>
               </Pressable>
+              }
             </View>
           }
         </View>
@@ -230,6 +239,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonGroup: {
+    alignItems: 'center',
     flexDirection: 'row',
   },
   title: {
@@ -276,25 +286,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const markdownStyles = StyleSheet.create({
-  // heading6: {
-  //   fontSize:11,
-  // },
-  // heading5: {
-  //   fontSize:11,
-  // },
-  // heading4: {
-  //   fontSize:11,
-  // },
-  // heading3: {
-  //   fontSize:11,
-  // },
-  // heading2: {
-  //   fontSize:11,
-  // },
-  // heading1: {
-  //   fontSize:11,
-  // },
+const markdownTitleStyles = StyleSheet.create({
   body: {
     fontSize:24
   }
