@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
 
-export default function MenuComponent() {
+// export const MenuComponent:React.FC<{deleteMemo:deleteMemo:() => void, memoNum:number}> = ({deleteMemo,memoNum}) => {
+export const MenuComponent = ({deleteMemo,_index}:{deleteMemo:(memoNum:number) => void, _index:number}) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);
@@ -17,6 +18,7 @@ export default function MenuComponent() {
   const handleDelete = () => {
     closeMenu();
     console.log('削除');
+    deleteMemo(_index);
   };
 
   return (

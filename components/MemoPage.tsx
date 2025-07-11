@@ -5,7 +5,7 @@ import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-nati
 import Markdown from 'react-native-markdown-display';
 import { addToMainMemo } from './ControllMemo';
 import MarkdownEditor from './MarkdownEditor';
-import MenuComponent from './Menu';
+import { MenuComponent } from './Menu';
 
 export interface MemoLayer { 
   name : string,
@@ -34,7 +34,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
   const [isPreview,setIsPreview] = useState<boolean>(true);
 
   const handleTextChange = (index: number, text: string) => {
-    console.log(text);
+    // console.log(text);
     // const newContents = [...memo.contents];
     const focused_newContents = [...focused_memo.contents];
     // newContents[index] = text;
@@ -45,7 +45,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
     // set_Memo(focused_memo);
     const newLayer = { ...focused_memo, contents: focused_newContents }
     _setFocusedMemo(newLayer);
-    console.log(newLayer);
+    // console.log(newLayer);
     if(focused_memo.idRoot.length === 1){
       _setMemo(newLayer);
     } else {
@@ -82,7 +82,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
       _setMemo({ ...memo, contents: [...memo.contents, ""] });
       console.log({ ...memo, contents: [...memo.contents, ""] });
     } else {
-      console.log(newFocusedMemo);
+      // console.log(newFocusedMemo);
       const newMemo = addToMainMemo(memo, cloneDeep(newFocusedMemo));
       _setMemo(newMemo);
     }
@@ -119,6 +119,21 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
     _setFocusedMemo(memo);
   };
 
+  const deleteMemo = (memoNum:number) => {
+    // console.log(memoNum);
+    const cloneFocusContents = cloneDeep(focused_memo).contents;
+    cloneFocusContents.splice(memoNum,1);
+
+    const updatedLayer: MemoLayer = {
+      ...focused_memo,
+      contents: cloneFocusContents,
+    };
+
+    // console.log(cloneFocusContents);
+    _setFocusedMemo(updatedLayer);
+    const newMemo = addToMainMemo(memo, updatedLayer);
+    _setMemo(newMemo);
+  };
 
   return (
     <View>
@@ -170,7 +185,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
               />
               {!isPreview &&
               <View style={styles.buttonGroup}>
-                <MenuComponent/>
+                <MenuComponent deleteMemo={deleteMemo} _index={index}/>
                 
                 {/* <Pressable>
                   <Feather name="more-vertical" size={20} color="black" />
@@ -194,7 +209,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
               />
               {!isPreview ?
               <View style={styles.buttonGroup}>
-                <MenuComponent/>
+                <MenuComponent deleteMemo={deleteMemo} _index={index}/>
                 {/* <Pressable>
                   <Feather name="more-vertical" size={20} color="black" />
                 </Pressable> */}
