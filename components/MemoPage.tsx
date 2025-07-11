@@ -1,11 +1,11 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
-import Feather from '@expo/vector-icons/Feather';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useState } from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 import { addToMainMemo } from './ControllMemo';
 import MarkdownEditor from './MarkdownEditor';
+import MenuComponent from './Menu';
 
 export interface MemoLayer { 
   name : string,
@@ -158,7 +158,6 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
           </View>
         </View>
       <ScrollView style={styles.layer}>
-      {/* <Markdown>{focused_memo.name}</Markdown> */}
       {focused_memo.contents.map((item, index) => (
         <View key={index} style={styles.row}>          
           { typeof item === 'string' ?
@@ -171,9 +170,11 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
               />
               {!isPreview &&
               <View style={styles.buttonGroup}>
-                <Pressable>
+                <MenuComponent/>
+                
+                {/* <Pressable>
                   <Feather name="more-vertical" size={20} color="black" />
-                </Pressable>
+                </Pressable> */}
                 <Pressable onPress={() => addLayer(item, index)}>
                   <Image
                     source={require('../assets/images/shovel-black-small.png')}
@@ -193,9 +194,10 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
               />
               {!isPreview ?
               <View style={styles.buttonGroup}>
-                <Pressable>
+                <MenuComponent/>
+                {/* <Pressable>
                   <Feather name="more-vertical" size={20} color="black" />
-                </Pressable>
+                </Pressable> */}
                 <Pressable onPress={() => moveLayer(item)}>
                   <AntDesign name="arrowright" size={30}/>
                 </Pressable>
