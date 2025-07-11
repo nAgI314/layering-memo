@@ -60,13 +60,15 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
     const newIdRoot = cloneDeep(cloneFocus).idRoot;
     newIdRoot.push(cloneDeep(cloneFocus).contents.length);
     const newLayerArray = cloneFocus.contents;
-    const newLayer = {
-      name: "",
-      contents: [""],
-      id: cloneFocus.contents.length,
-      idRoot: newIdRoot,
-    };
-    newLayerArray.push(newLayer);
+    // const newLayer = {
+    //   name: "",
+    //   contents: [""],
+    //   id: cloneFocus.contents.length,
+    //   idRoot: newIdRoot,
+    // };
+    const newString = "";
+    // newLayerArray.push(newLayer);
+    newLayerArray.push(newString);
     const newFocusedMemo = {
       ...cloneFocus,
       contents: newLayerArray,
@@ -119,31 +121,54 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
 
   return (
     <View>
-      
-
-
         <View style={styles.header}>
-          <Pressable onPress={() => backLayer()}>
-            <View>
-              <AntDesign name="back" size={25}/>
-            </View>
-          </Pressable>
-          <View>
-            <Text style={styles.title}>
-              メモ
-            </Text>
+          <View style={styles.buttonGroup}>
+            <Pressable onPress={() => backLayer()}>
+              <View>
+                <AntDesign name="home" size={35}/>
+              </View>
+            </Pressable>
+            <Pressable onPress={() => backLayer()}>
+              <View>
+                <AntDesign name="back" size={35}/>
+              </View>
+            </Pressable>
           </View>
-          <Pressable onPress={() => setIsPreview((prev)=>!prev)}>
+          {/* <Pressable onPress={() => backLayer()}>
             <View>
-              <AntDesign name="edit" size={25}/>
+              <AntDesign name="back" size={35}/>
             </View>
-          </Pressable>
+          </Pressable> */}
+          <View>
+            {/* <Text style={styles.title}>
+              メモ
+            </Text> */}
+            <Markdown style={markdownStyles}>{focused_memo.name}</Markdown>
+          </View>
+          <View style={styles.buttonGroup}>
+            <Pressable onPress={() => setIsPreview((prev)=>!prev)}>
+              {!isPreview ?
+                <View>
+                  <AntDesign name='check' size={35}/>
+                </View>
+              :
+                <View>
+                  <AntDesign name="edit" size={35}/>
+                </View>
+              }
+            </Pressable>
+            <Pressable>
+              <View>
+                <AntDesign name="bars" size={35}/>
+              </View>
+            </Pressable>
+          </View>
         </View>
       <ScrollView style={styles.layer}>
-      <Markdown>{focused_memo.name}</Markdown>
+      {/* <Markdown>{focused_memo.name}</Markdown> */}
       {focused_memo.contents.map((item, index) => (
         <View key={index} style={styles.row}>          
-          {typeof item === 'string' ?
+          { typeof item === 'string' ?
             <View style={styles.eachRow}>
               <MarkdownEditor
                 isPreview={isPreview}
@@ -151,12 +176,14 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
                 value={item}
                 onChangeText={(text: string) => handleTextChange(index, text)}
               />
-              <Pressable onPress={() => addLayer(item, index)}>
-                <Image
-                  source={require('../assets/images/shovel-black-small.png')}
-                  style={styles.image}
-                />
-              </Pressable>
+              {!isPreview &&
+                <Pressable onPress={() => addLayer(item, index)}>
+                  <Image
+                    source={require('../assets/images/shovel-black-small.png')}
+                    style={styles.image}
+                  />
+                </Pressable>
+              }
             </View>
           : 
             <View style={styles.eachRow}>
@@ -189,6 +216,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#e1e1e1',
     paddingTop: 40,
     paddingBottom: 12,
+    marginBottom:12,
     paddingHorizontal: 0,
     flexDirection: 'row',
     alignItems: 'center',
@@ -200,6 +228,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+  },
+  buttonGroup: {
+    flexDirection: 'row',
   },
   title: {
     fontSize:20,
@@ -243,4 +274,28 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: '#fff',
   },
+});
+
+const markdownStyles = StyleSheet.create({
+  // heading6: {
+  //   fontSize:11,
+  // },
+  // heading5: {
+  //   fontSize:11,
+  // },
+  // heading4: {
+  //   fontSize:11,
+  // },
+  // heading3: {
+  //   fontSize:11,
+  // },
+  // heading2: {
+  //   fontSize:11,
+  // },
+  // heading1: {
+  //   fontSize:11,
+  // },
+  body: {
+    fontSize:24
+  }
 });

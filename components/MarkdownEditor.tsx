@@ -1,8 +1,7 @@
 import React, { useRef } from 'react';
 
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 import Markdown from 'react-native-markdown-display';
-import Icon from 'react-native-vector-icons/AntDesign';
 
 type Props = {
   isPreview: boolean;
@@ -43,7 +42,7 @@ const MarkdownEditor = ({isPreview, onChangeIsPre, value, onChangeText }: Props)
               <Markdown>{value}</Markdown> 
             }
           </View>
-          <Pressable
+          {/* <Pressable
             onPress={() => {
               onChangeIsPre(false);
               setTimeout(() => {
@@ -53,7 +52,7 @@ const MarkdownEditor = ({isPreview, onChangeIsPre, value, onChangeText }: Props)
             style={{ marginLeft: 8 }} 
           >
             <Icon name="edit" size={23} />
-          </Pressable>
+          </Pressable> */}
         </View>
       )}
     </View>
