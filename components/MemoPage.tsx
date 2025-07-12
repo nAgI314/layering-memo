@@ -1,4 +1,5 @@
-import AntDesign from '@expo/vector-icons/AntDesign';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+// import AntDesign from '@expo/vector-icons/AntDesign';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useState } from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -6,6 +7,7 @@ import Markdown from 'react-native-markdown-display';
 import { addToMainMemo } from './ControllMemo';
 import MarkdownEditor from './MarkdownEditor';
 import { MenuComponent } from './Menu';
+// import NotificationConponent from './notification';
 
 export interface MemoLayer { 
   name : string,
@@ -172,6 +174,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
             </Pressable>
           </View>
         </View>
+        {/* <NotificationConponent/> */}
       <ScrollView style={styles.layer}>
       {focused_memo.contents.map((item, index) => (
         <View key={index} style={styles.row}>          

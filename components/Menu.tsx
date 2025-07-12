@@ -1,4 +1,5 @@
-import Feather from '@expo/vector-icons/Feather';
+import Feather from 'react-native-vector-icons/Feather';
+// import Feather from '@expo/vector-icons/Feather';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';

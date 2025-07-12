@@ -30,7 +30,10 @@ const MarkdownEditor = ({isPreview, onChangeIsPre, value, onChangeText }: Props)
           multiline
           value={value}
           onChangeText={onChangeText}
+          keyboardType="default" 
+          autoCapitalize="none"
           // onBlur={() => onChangeIsPre(true)} //focusが外れたらpreviewになるが、違うメモを編集しようと、違うメモをタップすると、previewになってしまってうざい
+          importantForAutofill="yes"
           placeholder="入力してください"
         />
       ) : (
