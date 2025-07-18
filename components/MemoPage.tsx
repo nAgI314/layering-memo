@@ -1,20 +1,21 @@
 import AntDesign from 'react-native-vector-icons/AntDesign';
-// import AntDesign from '@expo/vector-icons/AntDesign';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useState } from "react";
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 import { addToMainMemo } from './ControllMemo';
 import MarkdownEditor from './MarkdownEditor';
 import { MenuComponent } from './Menu';
-// import NotificationConponent from './notification';
-import {Notice} from './notification';
+import {notice} from './notification';
 
+import { memoPageStyles } from './styleSheet/memoPageStyle';
+import { markdownTitleStyles } from './styleSheet/MarkdownStyle';
 export interface MemoLayer { 
   name : string,
   contents : (MemoLayer | string )[],
   id : number,
   idRoot : number[],
+  isNotice : boolean,
 }
 
 export const MemoPage = () => {
@@ -23,7 +24,8 @@ export const MemoPage = () => {
       name: "main",
       contents : [],
       id : 0,
-      idRoot : [0]
+      idRoot : [0],
+      isNotice : false,
     }
   );
   console.log(memo);
@@ -37,81 +39,56 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
   const [isPreview,setIsPreview] = useState<boolean>(true);
 
   const handleTextChange = (index: number, text: string) => {
-    // console.log(text);
-    // const newContents = [...memo.contents];
     const focused_newContents = [...focused_memo.contents];
-    // newContents[index] = text;
     focused_newContents[index] = text;
-    // console.log(focused_newContents);
-    // _setMemo({ ...memo, contents: newContents });
-  //  _setFocusedMemo({ ...focused_memo, contents: focused_newContents});
-    // set_Memo(focused_memo);
     const newLayer = { ...focused_memo, contents: focused_newContents }
     _setFocusedMemo(newLayer);
-    // console.log(newLayer);
     if(focused_memo.idRoot.length === 1){
       _setMemo(newLayer);
     } else {
       const newMemo = addToMainMemo(memo, cloneDeep(newLayer));
       _setMemo(newMemo);
+    } 
+
+    if(focused_memo.isNotice == true){
+      notice({title:"通知テスト",body:"内容は内容です"})
     }
+
   };
 
   const addMemo = () => {
-    // console.log(searchMemo(memo,[0,0,1]));
     const cloneFocus = cloneDeep(focused_memo);
-    // console.log(cloneFocus);
     const newIdRoot = cloneDeep(cloneFocus).idRoot;
     newIdRoot.push(cloneDeep(cloneFocus).contents.length);
     const newLayerArray = cloneFocus.contents;
-    // const newLayer = {
-    //   name: "",
-    //   contents: [""],
-    //   id: cloneFocus.contents.length,
-    //   idRoot: newIdRoot,
-    // };
     const newString = "";
-    // newLayerArray.push(newLayer);
     newLayerArray.push(newString);
     const newFocusedMemo = {
       ...cloneFocus,
       contents: newLayerArray,
     }
-    // const newMemo = { ...memo, contents: [...memo.contents, ""] };
-    // _setMemo(newMemo);
-    // const newLayer = { ...focused_memo, contents: [...focused_memo.contents, ""] }
     _setFocusedMemo(newFocusedMemo);
     if(cloneFocus.idRoot.length === 1){
       _setMemo({ ...memo, contents: [...memo.contents, ""] });
       console.log({ ...memo, contents: [...memo.contents, ""] });
     } else {
-      // console.log(newFocusedMemo);
       const newMemo = addToMainMemo(memo, cloneDeep(newFocusedMemo));
       _setMemo(newMemo);
     }
   };
 
   const addLayer = (memoName:string,index:number) => {
-
-    // console.log(focused_memo)
-    // const root = {...focused_memo}.idRoot;
     const root = [...cloneDeep(focused_memo).idRoot, index];
-    // const root = focused_memo.idRoot;
-    // console.log(index);
-    // root.push(index);
-    // console.log(root);
     const newLayer: MemoLayer = {
       contents: [],
       name: memoName,
       id: index, 
-      idRoot: root
+      idRoot: root,
+      isNotice: false,
     };
-    // console.log(newLayer)
     _setFocusedMemo(newLayer);
     const newMemo = addToMainMemo(memo, cloneDeep(newLayer));
-    // console.log(newMemo);
     _setMemo(newMemo);
-    // console.log(addToMainMemo(memo, newLayer));
   };
 
   const moveLayer = (_memo:MemoLayer) => {
@@ -123,7 +100,6 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
   };
 
   const deleteMemo = (memoNum:number) => {
-    // console.log(memoNum);
     const cloneFocusContents = cloneDeep(focused_memo).contents;
     cloneFocusContents.splice(memoNum,1);
 
@@ -132,7 +108,6 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
       contents: cloneFocusContents,
     };
 
-    // console.log(cloneFocusContents);
     _setFocusedMemo(updatedLayer);
     const newMemo = addToMainMemo(memo, updatedLayer);
     _setMemo(newMemo);
@@ -140,8 +115,8 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
 
   return (
     <View>
-      <View style={styles.header}>
-        <View style={styles.buttonGroup}>
+      <View style={memoPageStyles.header}>
+        <View style={memoPageStyles.buttonGroup}>
           <Pressable onPress={() => backLayer()}>
             <View>
               <AntDesign name="home" size={35}/>
@@ -153,10 +128,11 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
             </View>
           </Pressable>
         </View>
+        {/* <View style={memoPageStyles.memoTitle} > */}
         <View>
           <Markdown style={markdownTitleStyles}>{focused_memo.name}</Markdown>
         </View>
-        <View style={styles.buttonGroup}>
+        <View style={memoPageStyles.buttonGroup}>
           <Pressable onPress={() => setIsPreview((prev)=>!prev)}>
             {!isPreview ?
               <View>
@@ -175,13 +151,11 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
           </Pressable>
         </View>
       </View>
-      {/* <NotificationConponent/> */}
-      <ScrollView style={styles.layer}>
-        <Notice title={"テストですよ"} body={"これがないようですよ。内容は長くして見ます。ｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆ"}/>
+      <ScrollView style={memoPageStyles.layer}>
       {focused_memo.contents.map((item, index) => (
-        <View key={index} style={styles.row}>          
+        <View key={index} style={memoPageStyles.row}>          
           { typeof item === 'string' ?
-            <View style={styles.eachRow}>
+            <View style={memoPageStyles.eachRow}>
               <MarkdownEditor
                 isPreview={isPreview}
                 onChangeIsPre={setIsPreview}
@@ -189,23 +163,20 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
                 onChangeText={(text: string) => handleTextChange(index, text)}
               />
               {!isPreview &&
-              <View style={styles.buttonGroup}>
+              <View style={memoPageStyles.buttonGroup}>
                 <MenuComponent deleteMemo={deleteMemo} _index={index}/>
                 
-                {/* <Pressable>
-                  <Feather name="more-vertical" size={20} color="black" />
-                </Pressable> */}
                 <Pressable onPress={() => addLayer(item, index)}>
                   <Image
                     source={require('../assets/images/shovel-black-small.png')}
-                    style={styles.image}
+                    style={memoPageStyles.image}
                   />
                 </Pressable>
               </View>
               }
             </View>
           : 
-            <View style={styles.eachRow}>
+            <View style={memoPageStyles.eachRow}>
               <MarkdownEditor
                 isPreview={isPreview}
                 onChangeIsPre={setIsPreview}
@@ -213,11 +184,8 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
                 onChangeText={(text: string) => handleTextChange(index, text)}
               />
               {!isPreview ?
-              <View style={styles.buttonGroup}>
+              <View style={memoPageStyles.buttonGroup}>
                 <MenuComponent deleteMemo={deleteMemo} _index={index}/>
-                {/* <Pressable>
-                  <Feather name="more-vertical" size={20} color="black" />
-                </Pressable> */}
                 <Pressable onPress={() => moveLayer(item)}>
                   <AntDesign name="arrowright" size={30}/>
                 </Pressable>
@@ -232,8 +200,8 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
         </View>
       ))}
       {!isPreview && 
-        <Pressable onPress={addMemo} style={styles.addButton}>
-          <Text style={styles.addButtonText}>メモを追加</Text>
+        <Pressable onPress={addMemo} style={memoPageStyles.addButton}>
+          <Text style={memoPageStyles.addButtonText}>メモを追加</Text>
         </Pressable>
       }  
       </ScrollView>
@@ -242,74 +210,3 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
 };
 
 
-const styles = StyleSheet.create({
-  header: {
-    backgroundColor: '#e1e1e1',
-    paddingTop: 40,
-    paddingBottom: 12,
-    marginBottom:12,
-    paddingHorizontal: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderBottomColor: '#ddd',
-    borderBottomWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  buttonGroup: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  title: {
-    fontSize:20,
-  },
-  arrow: {
-    borderWidth: 2,
-  },
-  layer: {
-    marginBottom: 8,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 6,
-  },
-  eachRow:{
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  input: {
-    flex: 1,
-    borderColor: '#aaa',
-    borderWidth: 1,
-    padding: 8,
-    marginRight: 8,
-    borderRadius: 4,
-    // color:"#fff"
-  },
-  image: {
-    width: 30,
-    height: 30,
-  },
-  addButton: {
-    backgroundColor: '#444',
-    padding: 8,
-    borderRadius: 4,
-    alignItems: 'center',
-    marginTop: 4,
-  },
-  addButtonText: {
-    color: '#fff',
-  },
-});
-
-const markdownTitleStyles = StyleSheet.create({
-  body: {
-    fontSize:24
-  }
-});

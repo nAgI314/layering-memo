@@ -7,7 +7,7 @@ type NoticeProps = {
   body: string;
 };
 
-export const Notice = ({title,body}:NoticeProps) => {
+export const notice = ({title,body}:NoticeProps) => {
   async function onDisplayNotification() {
     console.log(" tuuti ");
     // Request permissions (required for iOS)
@@ -38,9 +38,5 @@ export const Notice = ({title,body}:NoticeProps) => {
     });
   }
 
-  return (
-    <View>
-      <Button title="Display Notification" onPress={() => onDisplayNotification()} />
-    </View>
-  );
+  onDisplayNotification();
 }

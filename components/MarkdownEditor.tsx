@@ -11,7 +11,6 @@ type Props = {
 };
 
 const MarkdownEditor = ({isPreview, onChangeIsPre, value, onChangeText }: Props) => {
-  // const [showPreview, setShowPreview] = useState(isPreview);
   const textInputRef = useRef<TextInput>(null);
 
   return (
@@ -45,17 +44,6 @@ const MarkdownEditor = ({isPreview, onChangeIsPre, value, onChangeText }: Props)
               <Markdown>{value}</Markdown> 
             }
           </View>
-          {/* <Pressable
-            onPress={() => {
-              onChangeIsPre(false);
-              setTimeout(() => {
-                textInputRef.current?.focus();
-              }, 0);
-            }}
-            style={{ marginLeft: 8 }} 
-          >
-            <Icon name="edit" size={23} />
-          </Pressable> */}
         </View>
       )}
     </View>
