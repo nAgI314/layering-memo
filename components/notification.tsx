@@ -7,8 +7,7 @@ type NoticeProps = {
   body: string;
 };
 
-// export const Notice = (title:string,body:string) => {
-  export function Notice({title,body}:NoticeProps) {
+export const Notice = ({title,body}:NoticeProps) => {
   async function onDisplayNotification() {
     console.log(" tuuti ");
     // Request permissions (required for iOS)
@@ -16,12 +15,13 @@ type NoticeProps = {
 
     // Create a channel (required for Android)
     const channelId = await notifee.createChannel({
-      id: 'default',
-      name: 'Default Channel',
+      id: 'memoChannelID',
+      name: 'memoChannel',
     });
 
     // Display a notification
     await notifee.displayNotification({
+      id: "memo",
       title: title,
       body: body,
       android: {
