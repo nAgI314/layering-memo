@@ -1,4 +1,7 @@
 {
   "name": "react_native_CLI_test",
-  "displayName": "react_native_CLI_test"
+  "displayName": "react_native_CLI_test",
+  "plugins": [
+    "@notifee/react-native"
+  ]
 }

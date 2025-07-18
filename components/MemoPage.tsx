@@ -8,6 +8,7 @@ import { addToMainMemo } from './ControllMemo';
 import MarkdownEditor from './MarkdownEditor';
 import { MenuComponent } from './Menu';
 // import NotificationConponent from './notification';
+import {Screen} from './notification';
 
 export interface MemoLayer { 
   name : string,
@@ -139,43 +140,44 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
 
   return (
     <View>
-        <View style={styles.header}>
-          <View style={styles.buttonGroup}>
-            <Pressable onPress={() => backLayer()}>
-              <View>
-                <AntDesign name="home" size={35}/>
-              </View>
-            </Pressable>
-            <Pressable onPress={() => backLayer()}>
-              <View>
-                <AntDesign name="back" size={35}/>
-              </View>
-            </Pressable>
-          </View>
-          <View>
-            <Markdown style={markdownTitleStyles}>{focused_memo.name}</Markdown>
-          </View>
-          <View style={styles.buttonGroup}>
-            <Pressable onPress={() => setIsPreview((prev)=>!prev)}>
-              {!isPreview ?
-                <View>
-                  <AntDesign name='check' size={35}/>
-                </View>
-              :
-                <View>
-                  <AntDesign name="edit" size={35}/>
-                </View>
-              }
-            </Pressable>
-            <Pressable>
-              <View>
-                <AntDesign name="bars" size={35}/>
-              </View>
-            </Pressable>
-          </View>
+      <View style={styles.header}>
+        <View style={styles.buttonGroup}>
+          <Pressable onPress={() => backLayer()}>
+            <View>
+              <AntDesign name="home" size={35}/>
+            </View>
+          </Pressable>
+          <Pressable onPress={() => backLayer()}>
+            <View>
+              <AntDesign name="back" size={35}/>
+            </View>
+          </Pressable>
         </View>
-        {/* <NotificationConponent/> */}
+        <View>
+          <Markdown style={markdownTitleStyles}>{focused_memo.name}</Markdown>
+        </View>
+        <View style={styles.buttonGroup}>
+          <Pressable onPress={() => setIsPreview((prev)=>!prev)}>
+            {!isPreview ?
+              <View>
+                <AntDesign name='check' size={35}/>
+              </View>
+            :
+              <View>
+                <AntDesign name="edit" size={35}/>
+              </View>
+            }
+          </Pressable>
+          <Pressable>
+            <View>
+              <AntDesign name="bars" size={35}/>
+            </View>
+          </Pressable>
+        </View>
+      </View>
+      {/* <NotificationConponent/> */}
       <ScrollView style={styles.layer}>
+        <Screen/>
       {focused_memo.contents.map((item, index) => (
         <View key={index} style={styles.row}>          
           { typeof item === 'string' ?
@@ -234,7 +236,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
           <Text style={styles.addButtonText}>メモを追加</Text>
         </Pressable>
       }  
-    </ScrollView>
+      </ScrollView>
     </View>
   );
 };
