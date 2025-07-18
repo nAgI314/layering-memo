@@ -5,7 +5,7 @@ import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 import { addToMainMemo } from './ControllMemo';
 import MarkdownEditor from './MarkdownEditor';
-import { MenuComponent } from './Menu';
+import { MemoMenuComponent } from './MemoMenu';
 import {notice} from './notification';
 
 import { memoPageStyles } from './styleSheet/memoPageStyle';
@@ -113,6 +113,13 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
     _setMemo(newMemo);
   };
 
+  const setStatusBar = (memoNum:number) => {
+    //後でやりたい
+  } ;
+  const setReminder = (memoNum:number) => {
+    //後でやりたい
+  } ;
+
   return (
     <View>
       <View style={memoPageStyles.header}>
@@ -164,7 +171,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
               />
               {!isPreview &&
               <View style={memoPageStyles.buttonGroup}>
-                <MenuComponent deleteMemo={deleteMemo} _index={index}/>
+                <MemoMenuComponent deleteMemo={deleteMemo} _index={index}/>
                 
                 <Pressable onPress={() => addLayer(item, index)}>
                   <Image
@@ -185,7 +192,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
               />
               {!isPreview ?
               <View style={memoPageStyles.buttonGroup}>
-                <MenuComponent deleteMemo={deleteMemo} _index={index}/>
+                <MemoMenuComponent deleteMemo={deleteMemo} _index={index}/>
                 <Pressable onPress={() => moveLayer(item)}>
                   <AntDesign name="arrowright" size={30}/>
                 </Pressable>

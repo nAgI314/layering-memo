@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-nativ
 import Modal from 'react-native-modal';
 
 // export const MenuComponent:React.FC<{deleteMemo:deleteMemo:() => void, memoNum:number}> = ({deleteMemo,memoNum}) => {
-export const MenuComponent = ({deleteMemo,_index}:{deleteMemo:(memoNum:number) => void, _index:number}) => {
+export const MemoMenuComponent = ({deleteMemo,_index}:{deleteMemo:(memoNum:number) => void, _index:number}) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);
@@ -14,6 +14,14 @@ export const MenuComponent = ({deleteMemo,_index}:{deleteMemo:(memoNum:number) =
   const handleEdit = () => {
     closeMenu();
     console.log('編集');
+  };
+
+  const hundleSetStatusBar = () => {
+
+  };
+
+  const hundleSetReminder = () => {
+
   };
 
   const handleDelete = () => {
@@ -37,8 +45,14 @@ export const MenuComponent = ({deleteMemo,_index}:{deleteMemo:(memoNum:number) =
         style={styles.modal}
       >
         <View style={styles.menuContainer}>
-          <Pressable onPress={handleEdit} style={styles.menuItem}>
+          {/* <Pressable onPress={handleEdit} style={styles.menuItem}>
             <Text>編集</Text>
+          </Pressable> */}
+          <Pressable onPress={hundleSetStatusBar} style={styles.menuItem}>
+            <Text>ステータスバーに表示</Text>
+          </Pressable>
+          <Pressable onPress={hundleSetReminder} style={styles.menuItem}>
+            <Text>リマインダー</Text>
           </Pressable>
           <Pressable onPress={handleDelete} style={styles.menuItem}>
             <Text>削除</Text>
@@ -71,11 +85,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 8,
     paddingVertical: 8,
-    width: 120,
+    width: 175,
     elevation: 5,
   },
   menuItem: {
-    paddingVertical: 10,
+    paddingVertical: 8,
     paddingHorizontal: 16,
   },
 });
