@@ -8,7 +8,7 @@ import { addToMainMemo } from './ControllMemo';
 import MarkdownEditor from './MarkdownEditor';
 import { MenuComponent } from './Menu';
 // import NotificationConponent from './notification';
-import {Screen} from './notification';
+import {Notice} from './notification';
 
 export interface MemoLayer { 
   name : string,
@@ -177,7 +177,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
       </View>
       {/* <NotificationConponent/> */}
       <ScrollView style={styles.layer}>
-        <Screen/>
+        <Notice title={"テストですよ"} body={"これがないようですよ。内容は長くして見ます。ｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆｆ"}/>
       {focused_memo.contents.map((item, index) => (
         <View key={index} style={styles.row}>          
           { typeof item === 'string' ?

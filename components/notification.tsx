@@ -1,8 +1,14 @@
 import React from 'react';
-import { View, Button, Alert } from 'react-native';
+import { View, Button } from 'react-native';
 import notifee from '@notifee/react-native';
 
-export function Screen() {
+type NoticeProps = {
+  title: string;
+  body: string;
+};
+
+// export const Notice = (title:string,body:string) => {
+  export function Notice({title,body}:NoticeProps) {
   async function onDisplayNotification() {
     console.log(" tuuti ");
     // Request permissions (required for iOS)
@@ -16,15 +22,18 @@ export function Screen() {
 
     // Display a notification
     await notifee.displayNotification({
-      title: '通知テスト',
-      body: 'メモ：買い物',
+      title: title,
+      body: body,
       android: {
+        ongoing: true, //ユーザーが消せない設定(android14でできなくなったらしい)
         channelId,
         smallIcon: 'ic_launcher', // optional, defaults to 'ic_launcher'.
+        // smallIcon: 'ic_launcher_round',
         // pressAction is needed if you want the notification to open the app when pressed
         pressAction: {
           id: 'default',
         },
+        
       },
     });
   }
