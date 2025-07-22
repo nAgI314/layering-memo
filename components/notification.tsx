@@ -40,3 +40,11 @@ export const notice = ({title,body}:NoticeProps) => {
 
   onDisplayNotification();
 }
+
+export const closeNotice = async () => {
+  try {
+    await notifee.cancelNotification("memo");
+  } catch (e) {
+    console.log("通知のキャンセルに失敗しました:", e);
+  }
+};

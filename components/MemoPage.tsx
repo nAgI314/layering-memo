@@ -6,7 +6,7 @@ import Markdown from 'react-native-markdown-display';
 import { addToMainMemo } from './ControllMemo';
 import MarkdownEditor from './MarkdownEditor';
 import { MemoMenuComponent } from './MemoMenu';
-import {notice} from './notification';
+import {closeNotice, notice} from './notification';
 
 import { memoPageStyles } from './styleSheet/memoPageStyle';
 import { markdownTitleStyles } from './styleSheet/MarkdownStyle';
@@ -50,9 +50,9 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
       _setMemo(newMemo);
     } 
 
-    if(focused_memo.isNotice == true){
-      notice({title:"通知テスト",body:"内容は内容です"})
-    }
+    // if(focused_memo.isNotice == true){
+    //   notice({title:"通知テスト",body:"内容は内容です"})
+    // }
 
   };
 
@@ -114,8 +114,28 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
   };
 
   const setStatusBar = (memoNum:number) => {
-    //後でやりたい
-  } ;
+    const item = focused_memo.contents[memoNum];
+    if (typeof item === 'object' && item !== null && 'isNotice' in item) {
+      // isNoticeをtrueにする
+      (item as MemoLayer).isNotice = !(item as MemoLayer).isNotice;
+      const updatedLayer: MemoLayer = {
+        ...focused_memo,
+        contents: [...focused_memo.contents],
+      };
+      _setFocusedMemo(cloneDeep(updatedLayer));
+      const newMemo = addToMainMemo(memo, cloneDeep(updatedLayer));
+      _setMemo(newMemo);
+
+      // isNoticeがtrueなら通知
+      if ((item as MemoLayer).isNotice) {
+        notice({title:item.name,body:item.contents.toString()});
+      }
+      else {
+        // isNoticeがfalseなら通知を閉じる
+        closeNotice();
+      }
+    }
+  };
   const setReminder = (memoNum:number) => {
     //後でやりたい
   } ;
@@ -171,8 +191,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
               />
               {!isPreview &&
               <View style={memoPageStyles.buttonGroup}>
-                <MemoMenuComponent deleteMemo={deleteMemo} _index={index}/>
-                
+                <MemoMenuComponent deleteMemo={deleteMemo} _index={index} setStatusBar={() => setStatusBar(index)} isNotice={false}/>
                 <Pressable onPress={() => addLayer(item, index)}>
                   <Image
                     source={require('../assets/images/shovel-black-small.png')}
@@ -192,7 +211,7 @@ const MemoLayerComponent = ({ memo, _setMemo ,focused_memo, _setFocusedMemo}: { 
               />
               {!isPreview ?
               <View style={memoPageStyles.buttonGroup}>
-                <MemoMenuComponent deleteMemo={deleteMemo} _index={index}/>
+                <MemoMenuComponent deleteMemo={deleteMemo} _index={index} setStatusBar={() => setStatusBar(index)} isNotice={item.isNotice}/>
                 <Pressable onPress={() => moveLayer(item)}>
                   <AntDesign name="arrowright" size={30}/>
                 </Pressable>
